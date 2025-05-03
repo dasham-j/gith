@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GitHub Dashboard</title>
+  <!-- IBM Plex Mono font import -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@200;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #191919;
+      color: #fff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      min-height: 100vh;
+    }
+
+    input, button {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+    }
+
+    input {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+      font-weight: 400;
+    }
+
+    button {
+      margin-top: 0.8rem;
+      padding: 0.4rem 0.8rem;
+      background-color: #D15796;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      margin-top: 0.8rem;
+    }
+
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .hidden {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .widgets {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      max-width: 700px;
+      width: 100%;
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+      position: absolute;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .widgets.active {
+      opacity: 1;
+      transform: scale(1);
+      position: static;
+      pointer-events: auto;
+    }
+
+    .widget-container {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .widget-container img {
+      width: 100%;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #D15796;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    @keyframes spin {
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    .change-btn {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background-color: #D15796;
+      color: white;
+      border: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      z-index: 1000;
+    }
+
+    .change-btn.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      width: 8vw;
+      height: 8vw;
+      object-fit: contain;
+    }
+
+    /* GitHub Overview Card Styles */
+    .github-overview-card {
+      background-color: #191919;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 21px 0px 21px 11px;
+      max-width: 600px;
+      width: 100%;
+      color: #c9d1d9;
+      height: 100px;
+    }
+
+    .github-overview-card .overview-text {
+      flex: 1;
+      font-weight: 200;
+      margin: 0;
+    }
+
+    .github-overview-card .overview-text h2 {
+      margin: 2px 0 3px 0px;
+      font-size: 0.8rem;
+      font-weight: 550;
+      letter-spacing: 0.5px
+    }
+
+    .github-overview-card .overview-text p {
+      margin: 7px 0 2px 0px;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color:#8b949e;
+      letter-spacing: 0.5px
+    }
+
+    .github-overview-card .overview-text a {
+      margin-top: 5px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: start;
+      font-weight: 390;
+      letter-spacing: 0.5px
+    }
+
+    .github-overview-card .overview-text a img {
+      width: 12px;
+      height: 12px;
+      margin-right: 0px;
+    }
+
+    .github-overview-card .profile-pic-container {
+      width: 28vw;
+      height: 18vw;
+      overflow: hidden;
+      border-radius: 3%;
+      margin-right: 0px;
+    }
+
+    .github-overview-card .profile-pic {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin: 0;
+      padding: 0;
+    }
+    .profile-pic-container {
+  width: 13vw;
+  height: 20vw;  /* Adjusted to make it more rectangular */
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.profile-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+}
+.github-overview-card a {
+      transition: color 0.2s ease, transform 0.2s ease, text-decoration 0.2s ease;
+    }
+  
+    .github-overview-card a:hover {
+      color: #D15796;
+      text-decoration: underline;
+      transform: translateY(-1px);
+    }
+    html, body {
+  overflow: hidden;
+}
+
+
+    /* Mobile Scaling */
+    @media (max-width: 768px) {
+      .github-overview-card {
+        width: 85%;
+        padding-right: 40;
+        height:43px;
+      }
+
+      .overview-text h2 {
+        font-size: 2vw;
+      }
+
+      .overview-text p {
+        font-size: 2vw;
+      }
+
+      .profile-pic-container {
+        width: 30vw;
+        height: 20vw;
+      } 
+
+      .logo {
+        width: 18vw;
+        height: 18vw;
+      }
+
+      .widgets {
+        gap: 3vw;
+        padding: 2vw;
+      }
+
+      .widget-container img {
+        max-width: 100%;
+      }
+
+      .change-btn {
+        bottom: 10px;
+        right: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .github-overview-card {
+        width: 100%;
+      }
+
+      .profile-pic-container {
+        width: 20vw;
+        height: 80vw;
+      } 
+
+      .logo {
+        width: 18vw;
+        height: 18vw;
+      }
+
+      .overview-text h2 {
+        font-size: 2vw;
+      }
+
+      .overview-text p {
+        font-size: 2vw;
+        margin: 0;
+      }
+
+      .overview-text a {
+        font-size: 2vw;
+        padding-left: 0;
+      }
+
+      #githubLink {
+         padding-left: 0px;
+      }
+
+      .overview-text {
+        align-items: start;
+      }
+      .profile-pic-container {
+  width: 13vw;
+  height: 9vw;  /* Adjusted to make it more rectangular */
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.profile-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+}
+
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="input-section" id="inputSection">
+    <div class="logo-container">
+      <img src="gith.png" alt="GitHub Logo" class="logo" />
+    </div>
+
+    <input id="usernameInput" placeholder="GitHub Username" />
+    <button onclick="handleSubmit()">Continue</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+
+  <div class="widgets" id="widgets">
+    <!-- Overview Card -->
+    <div class="github-overview-card" id="overviewCard" style="display: none;">
+      <div class="overview-text">
+        <h2 id="profileName">Username - Overview</h2>
+        <p id="repoCount">Loading repositories...</p>
+        <a id="githubLink" href="#" target="_blank">
+          <img class="imgl" src="gith2.png" alt="GitHub Logo" style="width: 21px; height: 15px;">
+          <span id="githubUrlText">https://github.com/</span>
+        </a>
+      </div>
+      <div class="profile-pic-container">
+        <img id="profilePic" class="profile-pic" src="" alt="Profile Picture">
+      </div>
+    </div>
+
+    <!-- Contribution Chart -->
+    <div class="widget-container">
+      <div class="spinner"></div>
+      <img id="chart" />
+    </div>
+
+    <!-- Stats -->
+    <div class="widget-container">
+      <div class="spinner"></div>
+      <img id="stats" />
+    </div>
+  </div>
+
+  <button class="change-btn" id="changeBtn" onclick="resetUsername()">Change Account</button>
+
+  <script>
+    const usernameInput = document.getElementById('usernameInput');
+    const widgetsDiv = document.getElementById('widgets');
+    const errorMsg = document.getElementById('errorMsg');
+    const inputSection = document.getElementById('inputSection');
+    const changeBtn = document.getElementById('changeBtn');
+
+    // Overview Elements
+    const overviewCard = document.getElementById('overviewCard');
+    const profileName = document.getElementById('profileName');
+    const repoCount = document.getElementById('repoCount');
+    const githubLink = document.getElementById('githubLink');
+    const githubUrlText = document.getElementById('githubUrlText');
+    const profilePic = document.getElementById('profilePic');
+
+    const loadImageWithSpinner = (imgId, url) => {
+      const container = document.getElementById(imgId).parentElement;
+      const spinner = container.querySelector('.spinner');
+      const img = document.getElementById(imgId);
+      spinner.style.display = 'block';
+      img.style.opacity = 0;
+      img.style.display = 'none';
+      img.onload = () => {
+        spinner.style.display = 'none';
+        img.style.display = 'block';
+        setTimeout(() => img.style.opacity = 1, 50);
+      };
+      img.src = url;
+    };
+
+    const loadOverviewCard = (userData) => {
+      profileName.textContent = `${userData.login} - Overview`;
+      repoCount.textContent = `${userData.login} has ${userData.public_repos} repositories available.`;
+      githubLink.href = userData.html_url;
+      githubUrlText.textContent = userData.html_url;
+      profilePic.src = userData.avatar_url;
+      overviewCard.style.display = 'flex';
+    };
+
+    const loadWidgets = (username) => {
+      loadImageWithSpinner('stats', `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=dark`);
+      loadImageWithSpinner('chart', `https://ghchart.rshah.org/28a745/${username}?dark=1`);
+      inputSection.classList.add('hidden');
+      widgetsDiv.classList.add('active');
+      changeBtn.classList.add('active');
+    };
+
+    const handleSubmit = async () => {
+      const username = usernameInput.value.trim();
+      if (!username) return;
+      errorMsg.textContent = '';
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        localStorage.setItem('github_username', username);
+        loadOverviewCard(data);
+        loadWidgets(username);
+      } catch {
+        errorMsg.textContent = 'Invalid GitHub username. Please try again.';
+        widgetsDiv.classList.remove('active');
+        changeBtn.classList.remove('active');
+        overviewCard.style.display = 'none';
+      }
+    };
+
+    const resetUsername = () => {
+      localStorage.removeItem('github_username');
+      widgetsDiv.classList.remove('active');
+      changeBtn.classList.remove('active');
+      inputSection.classList.remove('hidden');
+      overviewCard.style.display = 'none';
+      usernameInput.value = '';
+    };
+
+    window.onload = async () => {
+      const saved = localStorage.getItem('github_username');
+      if (saved) {
+        try {
+          const res = await fetch(`https://api.github.com/users/${saved}`);
+          const data = await res.json();
+          loadOverviewCard(data);
+          loadWidgets(saved);
+        } catch {
+          resetUsername();
+        }
+      }
+    };
+  </script>
+</body>
+</html>

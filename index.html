@@ -466,11 +466,11 @@ body:hover .change-btn {
         localStorage.setItem('github_username', username);
         loadOverviewCard(data);
         loadWidgets(username);
+         document.getElementById('changeBtn').style.display = 'none';
         document.getElementById('inputSection').classList.add('hidden');
         document.getElementById('widgets').classList.add('active');
 
-  // Show the change username button now
-        document.getElementById('changeBtn').style.display = 'block';
+ 
       } catch {
         errorMsg.textContent = 'Invalid GitHub username. Please try again.';
         widgetsDiv.classList.remove('active');
@@ -490,6 +490,7 @@ body:hover .change-btn {
     };
 
     window.onload = async () => {
+      
       const saved = localStorage.getItem('github_username');
       if (saved) {
         try {

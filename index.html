@@ -468,6 +468,7 @@ body:hover .change-btn {
         localStorage.setItem('github_username', username);
         loadOverviewCard(data);
         loadWidgets(username);
+        document.querySelector('.change-btn').classList.remove('hidden-btn');
       } catch {
         errorMsg.textContent = 'Invalid GitHub username. Please try again.';
         widgetsDiv.classList.remove('active');

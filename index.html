@@ -496,7 +496,7 @@ body:hover .change-btn {
     };
 
     window.onload = async () => {
-      const saved = localStorage.getItem('github_username');Z
+      const saved = localStorage.getItem('github_username');
       if (saved) {
         try {
           const res = await fetch(`https://api.github.com/users/${saved}`);

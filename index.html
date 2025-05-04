@@ -140,13 +140,11 @@
       z-index: 1000;
       font-weight: 400;
     }
-.change-btn {
-  opacity: 0;
-  transform: scale(0.95);
-  pointer-events: none;
-  transition: all 0.3s ease;
+.widgets-active #changeBtn {
+  opacity: 1;
+  pointer-events: auto;
 }
-    .widgets:hover ~ .change-btn {
+    .widgets-active #changeBtn:hover {
   opacity: 1 !important;
   transform: scale(1) !important;
   pointer-events: auto !important;

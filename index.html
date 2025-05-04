@@ -254,6 +254,18 @@
     html, body {
   overflow: hidden;
 }
+    .change-btn {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+body:hover .change-btn {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
 
 
     /* Mobile Scaling */

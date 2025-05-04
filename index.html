@@ -122,7 +122,6 @@
         transform: translate(-50%, -50%) rotate(360deg);
       }
     }
-
     .change-btn {
       position: fixed;
       bottom: 10px;
@@ -138,25 +137,21 @@
       pointer-events: none;
       transition: opacity 0.4s ease, transform 0.4s ease;
       z-index: 1000;
-      font-weight: 400;
     }
-.change-btn {
+    .change-btn {
   opacity: 0;
-  pointer-events: none;
   transform: scale(0.95);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+    .widgets:hover ~ .change-btn {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  pointer-events: auto !important;
 }
 
-/* Show on widgets-active and hover on body */
-body.widgets-active .change-btn {
-  opacity: 0;
-  pointer-events: auto;
-}
+  
 
-body.widgets-active:hover .change-btn {
-  opacity: 1;
-  transform: scale(1);
-}
     .logo-container {
       display: flex;
       justify-content: center;

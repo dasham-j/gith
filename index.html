@@ -123,31 +123,27 @@
       }
     }
     .change-btn {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background-color: #D15796;
-      color: white;
-      border: none;
-      padding: 0.5rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      opacity: 0;
-      transform: scale(0.95);
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      z-index: 1000;
-    }
-    .change-btn {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: #D15796;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
   opacity: 0;
-  transform: scale(0.95);
   pointer-events: none;
+  transform: scale(0.95);
   transition: all 0.3s ease;
+  z-index: 1000;
 }
-    .widgets:hover ~ .change-btn {
-  opacity: 1 !important;
-  transform: scale(1) !important;
-  pointer-events: auto !important;
+
+/* Button becomes visible ONLY when hovering over .widgets.active */
+.widgets.active:hover ~ .change-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
 }
 
   
@@ -418,7 +414,6 @@ body:hover .change-btn {
     const inputSection = document.getElementById('inputSection');
     const changeBtn = document.getElementById('changeBtn');
 
-    // Overview Elements
     const overviewCard = document.getElementById('overviewCard');
     const profileName = document.getElementById('profileName');
     const repoCount = document.getElementById('repoCount');
@@ -469,13 +464,6 @@ body:hover .change-btn {
         localStorage.setItem('github_username', username);
         loadOverviewCard(data);
         loadWidgets(username);
-        /*document.querySelector('.change-btn').classList.remove('hidden-btn');*/
-        // Hide input, show widgets
-  document.getElementById('inputSection').classList.add('hidden');
-  document.getElementById('widgets').classList.add('active');
-
-  // Show the change username button now
-  document.getElementById('changeBtn').style.display = 'block';
       } catch {
         errorMsg.textContent = 'Invalid GitHub username. Please try again.';
         widgetsDiv.classList.remove('active');
@@ -491,9 +479,16 @@ body:hover .change-btn {
       inputSection.classList.remove('hidden');
       overviewCard.style.display = 'none';
       usernameInput.value = '';
-      document.getElementById('changeBtn').style.display = 'none';
-
     };
+
+    window.addEventListener('load', () => {
+      if (!localStorage.getItem('github_username')) {
+        history.pushState(null, document.title, location.href);
+        window.addEventListener('popstate', function () {
+          history.pushState(null, document.title, location.href);
+        });
+      }
+    });
 
     window.onload = async () => {
       const saved = localStorage.getItem('github_username');

@@ -123,24 +123,26 @@
       }
     }
     .change-btn {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  background-color: #D15796;
-  color: white;
-  border: none;
-  padding: 0.5rem 0.8rem;
-  border-radius: 6px;
-  cursor: pointer;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background-color: #D15796;
+      color: white;
+      border: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none; /* Hidden by default */
+      z-index: 1000;
+    }
+    .change-btn {
   opacity: 0;
   pointer-events: none;
   transform: scale(0.95);
-  transition: all 0.3s ease;
-  z-index: 1000;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Button becomes visible ONLY when hovering over .widgets.active */
-.widgets.active:hover ~ .change-btn {
+body:hover .change-btn {
   opacity: 1;
   pointer-events: auto;
   transform: scale(1);
@@ -450,7 +452,7 @@ body:hover .change-btn {
       loadImageWithSpinner('chart', `https://ghchart.rshah.org/28a745/${username}?dark=1`);
       inputSection.classList.add('hidden');
       widgetsDiv.classList.add('active');
-      changeBtn.classList.add('active');
+      changeBtn.style.display = 'block'; // Show back button
     };
 
     const handleSubmit = async () => {
@@ -467,7 +469,7 @@ body:hover .change-btn {
       } catch {
         errorMsg.textContent = 'Invalid GitHub username. Please try again.';
         widgetsDiv.classList.remove('active');
-        changeBtn.classList.remove('active');
+        changeBtn.style.display = 'none';
         overviewCard.style.display = 'none';
       }
     };
@@ -475,21 +477,17 @@ body:hover .change-btn {
     const resetUsername = () => {
       localStorage.removeItem('github_username');
       widgetsDiv.classList.remove('active');
-      changeBtn.classList.remove('active');
+      changeBtn.style.display = 'none';
       inputSection.classList.remove('hidden');
       overviewCard.style.display = 'none';
       usernameInput.value = '';
+
+      // Reset image URLs to clear previous images
+      document.getElementById('stats').src = '';
+      document.getElementById('chart').src = '';
     };
 
-    window.addEventListener('load', () => {
-      if (!localStorage.getItem('github_username')) {
-        history.pushState(null, document.title, location.href);
-        window.addEventListener('popstate', function () {
-          history.pushState(null, document.title, location.href);
-        });
-      }
-    });
-
+    // Optional: Auto-load saved username (comment to disable)
     window.onload = async () => {
       const saved = localStorage.getItem('github_username');
       if (saved) {

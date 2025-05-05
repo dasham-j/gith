@@ -333,7 +333,7 @@
     const loadOverviewCard = (userData) => {
       const displayName = userData.name || userData.login;
       profileName.textContent = displayName;
-      repoCount.textContent = `${userData.login} has ${userData.public_repos} public repositories.`;
+      repoCount.textContent = `${userData.login} has ${userData.public_repos} active repositories.`;
       githubLink.href = userData.html_url;
       githubUrlText.textContent = userData.html_url.replace("https://", "");
       profilePic.src = userData.avatar_url;

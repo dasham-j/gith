@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GitHub Dashboard</title>
-  <!-- IBM Plex Mono font import -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@200;500;700&display=swap" rel="stylesheet">
 
   <style>
@@ -20,6 +19,7 @@
       justify-content: center;
       padding: 1rem;
       min-height: 100vh;
+      overflow: hidden;
     }
 
     input, button {
@@ -122,6 +122,7 @@
         transform: translate(-50%, -50%) rotate(360deg);
       }
     }
+
     .change-btn {
       position: fixed;
       bottom: 10px;
@@ -132,23 +133,19 @@
       padding: 0.5rem 0.8rem;
       border-radius: 6px;
       cursor: pointer;
-      display: none; /* Hidden by default */
+      display: none;
       z-index: 1000;
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .change-btn {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.95);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
 
-body:hover .change-btn {
-  opacity: 1;
-  pointer-events: auto;
-  transform: scale(1);
-}
-
-  
+    body:hover .change-btn {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
 
     .logo-container {
       display: flex;
@@ -163,234 +160,129 @@ body:hover .change-btn {
       object-fit: contain;
     }
 
-    /* GitHub Overview Card Styles */
+    /* NEW GitHub Overview Card Styles */
     .github-overview-card {
       background-color: #191919;
       border: 1px solid #30363d;
-      border-radius: 6px;
+      border-radius: 10px;
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      
+      width: 100%;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+      display: none;
+    }
+
+    .overview-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .overview-text h2, .overview-text p, .overview-text a {
+      margin: 0;
+    }
+
+    .overview-text h2 {
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+    .overview-text p {
+      font-size: 0.75rem;
+      color: #8b949e;
+    }
+
+    .overview-text a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
-      justify-content: space-evenly;
-      padding: 21px 0px 21px 11px;
-      max-width: 600px;
-      width: 100%;
-      color: #c9d1d9;
-      height: 100px;
+      gap: 6px;
+      transition: transform 0.2s ease;
     }
 
-    .github-overview-card .overview-text {
-      flex: 1;
-      font-weight: 200;
-      margin: 0;
-    }
-
-    .github-overview-card .overview-text h2 {
-      margin: 2px 0 3px 0px;
-      font-size: 0.8rem;
-      font-weight: 550;
-      letter-spacing: 0.5px
-    }
-
-    .github-overview-card .overview-text p {
-      margin: 7px 0 2px 0px;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color:#8b949e;
-      letter-spacing: 0.5px
-    }
-
-    .github-overview-card .overview-text a {
-      margin-top: 5px;
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.7rem;
-      display: inline-flex;
-      align-items: start;
-      font-weight: 390;
-      letter-spacing: 0.5px
-    }
-
-    .github-overview-card .overview-text a img {
-      width: 12px;
-      height: 12px;
-      margin-right: 0px;
-    }
-
-    .github-overview-card .profile-pic-container {
-      width: 28vw;
-      height: 18vw;
-      overflow: hidden;
-      border-radius: 3%;
-      margin-right: 0px;
-    }
-
-    .github-overview-card .profile-pic {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      margin: 0;
-      padding: 0;
-    }
-    .profile-pic-container {
-  width: 13vw;
-  height: 20vw;  /* Adjusted to make it more rectangular */
-  overflow: hidden;
-  margin-right: 10px;
-}
-
-.profile-pic {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin: 0;
-  padding: 0;
-}
-.github-overview-card a {
-      transition: color 0.2s ease, transform 0.2s ease, text-decoration 0.2s ease;
-    }
-  
-    .github-overview-card a:hover {
-      color: #D15796;
+    .overview-text a:hover {
+      transform: translateY(-2px);
       text-decoration: underline;
-      transform: translateY(-1px);
-    }
-    html, body {
-  overflow: hidden;
-}
-    .change-btn {
-  opacity: 0;
-  transform: scale(0.95);
-  pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-body:hover .change-btn {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
-}
-
-
-    /* Mobile Scaling */
-    @media (max-width: 768px) {
-      .github-overview-card {
-        width: 85%;
-        padding-right: 40;
-        height:43px;
-      }
-
-      .overview-text h2 {
-        font-size: 2vw;
-      }
-
-      .overview-text p {
-        font-size: 2vw;
-      }
-
-      .profile-pic-container {
-        width: 30vw;
-        height: 20vw;
-      } 
-
-      .logo {
-        width: 18vw;
-        height: 18vw;
-      }
-
-      .widgets {
-        gap: 3vw;
-        padding: 2vw;
-      }
-
-      .widget-container img {
-        max-width: 100%;
-      }
-
-      .change-btn {
-        bottom: 10px;
-        right: 10px;
-      }
     }
 
-    @media (max-width: 480px) {
-      .github-overview-card {
-        width: 100%;
-      }
+    .profile-pic-container {
+      width: 120px;
+      height: 80px;
+      overflow: hidden;
+      border-radius: 10px;
+      flex-shrink: 0;
+      position: relative;
+    }
 
-      .profile-pic-container {
-        width: 20vw;
-        height: 80vw;
-      } 
-
-      .logo {
-        width: 18vw;
-        height: 18vw;
-      }
-
-      .overview-text h2 {
-        font-size: 2vw;
-      }
-
-      .overview-text p {
-        font-size: 2vw;
-        margin: 0;
-      }
-
-      .overview-text a {
-        font-size: 2vw;
-        padding-left: 0;
-      }
-
-      #githubLink {
-         padding-left: 0px;
-      }
-
-      .overview-text {
-        align-items: start;
-      }
-      .profile-pic-container {
-  width: 13vw;
-  height: 9vw;  /* Adjusted to make it more rectangular */
-  overflow: hidden;
-  margin-right: 10px;
-}
-
-.profile-pic {
+    .profile-pic {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: auto;
+      height: 120px;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+    }
+    .widget-container, .github-overview-card {
+  position: relative;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin: 0;
-  padding: 0;
+  max-width: 600px;
+  box-sizing: border-box;
 }
+    @media (max-width: 400px) {
+      .github-overview-card {
+        padding: 10px 12px;
+        max-width: 95%;
+      }
+
+      .overview-text h2 {
+        font-size: 0.95rem;
+      }
+
+      .overview-text p,
+      .overview-text a {
+        font-size: 0.7rem;
+      }
+
+      .profile-pic-container {
+        width: 85px;
+        height: 58px;
+      }
 
     }
   </style>
-  
 </head>
 <body>
   <div class="input-section" id="inputSection">
     <div class="logo-container">
       <img src="gith.png" alt="GitHub Logo" class="logo" />
     </div>
-
     <input id="usernameInput" placeholder="GitHub Username" />
     <button onclick="handleSubmit()">Continue</button>
     <div class="error" id="errorMsg"></div>
   </div>
 
   <div class="widgets" id="widgets">
-    <!-- Overview Card -->
-    <div class="github-overview-card" id="overviewCard" style="display: none;">
+    <!-- New Overview Card -->
+    <div class="github-overview-card" id="overviewCard">
       <div class="overview-text">
-        <h2 id="profileName">Username - Overview</h2>
-        <p id="repoCount">Loading repositories...</p>
+        <h2 id="profileName">Loading...</h2>
+        <p id="repoCount"></p>
         <a id="githubLink" href="#" target="_blank">
           <img class="imgl" src="gith2.png" alt="GitHub Logo" style="width: 21px; height: 15px;">
-          <span id="githubUrlText">https://github.com/</span>
+          <span id="githubUrlText">github.com</span>
         </a>
       </div>
       <div class="profile-pic-container">
-        <img id="profilePic" class="profile-pic" src="" alt="Profile Picture">
+        <img id="profilePic" class="profile-pic" src="" alt="Profile Picture" />
       </div>
     </div>
 
@@ -439,10 +331,11 @@ body:hover .change-btn {
     };
 
     const loadOverviewCard = (userData) => {
-      profileName.textContent = `${userData.login} - Overview`;
-      repoCount.textContent = `${userData.login} has ${userData.public_repos} repositories available.`;
+      const displayName = userData.name || userData.login;
+      profileName.textContent = displayName;
+      repoCount.textContent = `${userData.login} has ${userData.public_repos} public repositories.`;
       githubLink.href = userData.html_url;
-      githubUrlText.textContent = userData.html_url;
+      githubUrlText.textContent = userData.html_url.replace("https://", "");
       profilePic.src = userData.avatar_url;
       overviewCard.style.display = 'flex';
     };
@@ -452,7 +345,7 @@ body:hover .change-btn {
       loadImageWithSpinner('chart', `https://ghchart.rshah.org/28a745/${username}?dark=1`);
       inputSection.classList.add('hidden');
       widgetsDiv.classList.add('active');
-      changeBtn.style.display = 'block'; // Show back button
+      changeBtn.style.display = 'block';
     };
 
     const handleSubmit = async () => {
@@ -481,13 +374,10 @@ body:hover .change-btn {
       inputSection.classList.remove('hidden');
       overviewCard.style.display = 'none';
       usernameInput.value = '';
-
-      // Reset image URLs to clear previous images
       document.getElementById('stats').src = '';
       document.getElementById('chart').src = '';
     };
 
-    // Optional: Auto-load saved username (comment to disable)
     window.onload = async () => {
       const saved = localStorage.getItem('github_username');
       if (saved) {

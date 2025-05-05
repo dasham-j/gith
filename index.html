@@ -258,6 +258,52 @@
       }
 
     }
+    @media (max-width: 320px) {
+  body {
+    padding: 0.3rem;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  input {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+    max-width: 100%;
+  }
+
+  button {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .overview-text h2 {
+    font-size: 0.85rem;
+  }
+
+  .overview-text p,
+  .overview-text a {
+    font-size: 0.65rem;
+  }
+
+  .github-overview-card {
+    flex-direction: column;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .profile-pic-container {
+    height: 80px;
+  }
+
+  .change-btn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -333,7 +379,7 @@
     const loadOverviewCard = (userData) => {
       const displayName = userData.name || userData.login;
       profileName.textContent = displayName;
-      repoCount.textContent = `${userData.login} has ${userData.public_repos} active repositories.`;
+      repoCount.textContent = `${userData.login} has ${userData.public_repos} public repositories.`;
       githubLink.href = userData.html_url;
       githubUrlText.textContent = userData.html_url.replace("https://", "");
       profilePic.src = userData.avatar_url;
